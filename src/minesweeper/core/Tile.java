@@ -1,5 +1,7 @@
 package minesweeper.core;
 
+import minesweeper.core.Tile.State;
+
 /**
  * Tile of a field.
  */
@@ -32,5 +34,15 @@ public abstract class Tile {
      */
     void setState(State state) {
         this.state = state;
+    }
+    
+    //v pripade MARK vypise M, inak -
+    public String toString(){
+    	if (this.getState()==State.MARKED){
+    		return "M ";
+    	}
+    	else {
+    		return "- ";
+    	}
     }
 }
