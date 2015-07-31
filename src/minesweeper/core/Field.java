@@ -2,6 +2,8 @@ package minesweeper.core;
 
 import java.util.Random;
 
+import minesweeper.core.Tile.State;
+
 /**
  * Field represents playing field and game logic.
  */
@@ -128,7 +130,19 @@ public class Field {
 	 * @return true if game is solved, false otherwise
 	 */
 	private boolean isSolved() {
-		throw new UnsupportedOperationException("Method isSolved not yet implemented");
+		return ((rowCount*columnCount)-getNumberOf(State.OPEN)) == getMineCount();
+	}
+	
+	private int getNumberOf(Tile.State state){
+		int pocet=0;
+		for (int row = 0; row < rowCount; row++) {
+			for (int col = 0; col < columnCount; col++) {
+				if (tiles[row][col].getState()==state){
+					pocet++;
+				}
+			}			
+		}
+		return pocet;
 	}
 
 	/**
@@ -160,7 +174,7 @@ public class Field {
 		return count;
 	}
 
-	private int getRowCount() {
+	public int getRowCount() {
 		return rowCount;
 	}
 

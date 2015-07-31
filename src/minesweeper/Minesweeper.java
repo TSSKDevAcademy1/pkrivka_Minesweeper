@@ -8,7 +8,7 @@ import minesweeper.core.Field;
  */
 public class Minesweeper {
     /** User interface. */
-    private ConsoleUI userInterface;
+    private UserInterface userInterface;
  
     /**
      * Constructor.
@@ -16,10 +16,11 @@ public class Minesweeper {
     private Minesweeper() {
         userInterface = new ConsoleUI();
         
-        Field field = new Field(9, 9, 10);     
+        Field field = new Field(30, 30, 10);     
         field.openTile(2, 3);
-        System.out.println(field);
+        
         userInterface.newGameStarted(field);
+//        System.out.println(field);
     }
 
     /**
