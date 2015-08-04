@@ -70,7 +70,6 @@ public class Field {
 				state = GameState.FAILED;
 				return;
 			} else if (((Clue) tile).getValue() == 0) {
-
 				openAdjacentTiles(row, column);
 			}
 			if (isSolved()) {

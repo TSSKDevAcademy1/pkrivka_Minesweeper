@@ -47,13 +47,12 @@ public class ConsoleUI implements UserInterface {
 		do {
 			update();
 			processInput();
-			if (field.getState() == GameState.SOLVED){
+			if (field.getState() == GameState.SOLVED) {
 				System.out.println("Si super, vyhral si!");
 				System.exit(0);
-			}
-			else if (field.getState() == GameState.FAILED){
+			} else if (field.getState() == GameState.FAILED) {
 				update();
-				System.out.println("Prehral si!");				
+				System.out.println("Prehral si!");
 				System.exit(0);
 			}
 			// throw new UnsupportedOperationException("Resolve the game state -
@@ -129,19 +128,18 @@ public class ConsoleUI implements UserInterface {
 			} else {
 				int row = matcher.group(3).charAt(0) - 'A';
 				int column = Integer.parseInt(matcher.group(4));
-				System.out.println(row + "" + column);
-				if ("O".equals(matcher.group(2))) {
-					field.openTile(row, column);
-					
-				} else if ("M".equals(matcher.group(2))){
-					field.markTile(row, column);
-				}
-				else {
-					System.out.println("Zadal si zly parameter!");
+				if (row > field.getRowCount() || column > field.getColumnCount()) {
+					System.out.println("Zadal si prilis velke cislo stlpca alebo riadka!!!");
+				} else {
+					if ("O".equals(matcher.group(2))) {
+						field.openTile(row, column);
+
+					} else if ("M".equals(matcher.group(2))) {
+						field.markTile(row, column);
+					}
 				}
 			}
-		}
-		else {
+		} else {
 			System.out.println("Zadal si zly parameter!!!");
 		}
 	}
