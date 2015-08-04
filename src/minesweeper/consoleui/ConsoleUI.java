@@ -1,11 +1,16 @@
 package minesweeper.consoleui;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import minesweeper.UserInterface;
 import minesweeper.core.Field;
+import minesweeper.core.GameState;
+import minesweeper.core.Tile;
 
 /**
  * Console user interface.
@@ -39,13 +44,22 @@ public class ConsoleUI implements UserInterface {
 	@Override
 	public void newGameStarted(Field field) {
 		this.field = field;
-		// do {
-		update();
-		// processInput();
-		//// throw new UnsupportedOperationException("Resolve the game state -
-		// winning or loosing condition.");
-		// } while(true);
-		//
+		do {
+			update();
+			processInput();
+			if (field.getState() == GameState.SOLVED){
+				System.out.println("Si super, vyhral si!");
+				System.exit(0);
+			}
+			else if (field.getState() == GameState.FAILED){
+				update();
+				System.out.println("Prehral si!");				
+				System.exit(0);
+			}
+			// throw new UnsupportedOperationException("Resolve the game state -
+			// winning or loosing condition.");
+		} while (true);
+
 	}
 
 	/*
@@ -63,7 +77,7 @@ public class ConsoleUI implements UserInterface {
 		int x = field.getColumnCount();
 		System.out.printf("%2s", " ");
 		for (int i = 0; i < rowCount; i++) {
-			int a = 1 + i;
+			int a = i;
 			System.out.printf("%3s", a);
 		}
 		System.out.print("\n");
@@ -73,8 +87,8 @@ public class ConsoleUI implements UserInterface {
 			if (i < 26) {
 				System.out.printf("%3s", myChar);
 				b++;
-				if(b==26){
-					b=0;
+				if (b == 26) {
+					b = 0;
 				}
 			} else {
 				if (c == 26) {
@@ -101,7 +115,34 @@ public class ConsoleUI implements UserInterface {
 	 * playing field according to input string.
 	 */
 	private void processInput() {
-		// throw new UnsupportedOperationException("Method processInput not yet
-		// implemented");
+		System.out.println("Vitaj " + System.getProperty("user.name"));
+		System.out.println(
+				"X – ukoncenie hry,\nMA1 – oznacenie dlazdice v riadku A a stlpci 1,\nOB4 – odkrytie dlazdice v riadku B a stlpci 4");
+		String input = readLine();
+		input = input.toUpperCase();
+		Pattern p = Pattern.compile("X|((O|M)([A-Z])([0-9]))");
+		Matcher matcher = p.matcher(input);
+		if (matcher.matches()) {
+			if ("X".equals(matcher.group(0))) {
+				System.out.println("Dakujeme za hru");
+				System.exit(0);
+			} else {
+				int row = matcher.group(3).charAt(0) - 'A';
+				int column = Integer.parseInt(matcher.group(4));
+				System.out.println(row + "" + column);
+				if ("O".equals(matcher.group(2))) {
+					field.openTile(row, column);
+					
+				} else if ("M".equals(matcher.group(2))){
+					field.markTile(row, column);
+				}
+				else {
+					System.out.println("Zadal si zly parameter!");
+				}
+			}
+		}
+		else {
+			System.out.println("Zadal si zly parameter!!!");
+		}
 	}
 }

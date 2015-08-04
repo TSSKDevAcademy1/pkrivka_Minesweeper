@@ -51,7 +51,7 @@ public class Field {
 
 		// generate the field content
 		generate();
-//		System.out.println(this.toString());
+		// System.out.println(this.toString());
 	}
 
 	/**
@@ -69,12 +69,14 @@ public class Field {
 			if (tile instanceof Mine) {
 				state = GameState.FAILED;
 				return;
-			}
+			} else if (((Clue) tile).getValue() == 0) {
 
-//			if (isSolved()) {
-//				state = GameState.SOLVED;
-//				return;
-//			}
+				openAdjacentTiles(row, column);
+			}
+			if (isSolved()) {
+				state = GameState.SOLVED;
+				return;
+			}
 		}
 	}
 
@@ -99,30 +101,26 @@ public class Field {
 	 * Generates playing field.
 	 */
 	private void generate() {
-		//nahodne vygeneruje miny
+		// nahodne vygeneruje miny
 		Random ran = new Random();
-		for (int i=0;i<mineCount;i++){			
+		for (int i = 0; i < mineCount; i++) {
 			int mine_row = ran.nextInt(rowCount);
 			int mine_col = ran.nextInt(columnCount);
-			if (tiles[mine_row][mine_col] == null){
+			if (tiles[mine_row][mine_col] == null) {
 				tiles[mine_row][mine_col] = new Mine();
-			}
-			else {
+			} else {
 				i--;
 			}
 		}
-		//ak je dana pozicia prazdna, vygeneruje znacku
-		for (int row=0;row<rowCount;row++){
-			for (int col=0;col<columnCount;col++){
-				if (tiles[row][col] == null){
+		// ak je dana pozicia prazdna, vygeneruje znacku
+		for (int row = 0; row < rowCount; row++) {
+			for (int col = 0; col < columnCount; col++) {
+				if (tiles[row][col] == null) {
 					tiles[row][col] = new Clue(countAdjacentMines(row, col));
 				}
 			}
 		}
 	}
-	
-	
-	
 
 	/**
 	 * Returns true if game is solved, false otherwise.
@@ -130,17 +128,17 @@ public class Field {
 	 * @return true if game is solved, false otherwise
 	 */
 	private boolean isSolved() {
-		return ((rowCount*columnCount)-getNumberOf(State.OPEN)) == getMineCount();
+		return ((rowCount * columnCount) - getNumberOf(State.OPEN)) == getMineCount();
 	}
-	
-	private int getNumberOf(Tile.State state){
-		int pocet=0;
+
+	private int getNumberOf(Tile.State state) {
+		int pocet = 0;
 		for (int row = 0; row < rowCount; row++) {
 			for (int col = 0; col < columnCount; col++) {
-				if (tiles[row][col].getState()==state){
+				if (tiles[row][col].getState() == state) {
 					pocet++;
 				}
-			}			
+			}
 		}
 		return pocet;
 	}
@@ -174,6 +172,21 @@ public class Field {
 		return count;
 	}
 
+	private void openAdjacentTiles(int row, int column) {
+		for (int rowOffset = -1; rowOffset <= 1; rowOffset++) {
+			int actRow = row + rowOffset;
+			if (actRow >= 0 && actRow < getRowCount()) {
+				for (int columnOffset = -1; columnOffset <= 1; columnOffset++) {
+					int actColumn = column + columnOffset;
+					if (actColumn >= 0 && actColumn < columnCount) {
+						openTile(actRow, actColumn);
+					}
+				}
+			}
+		}
+
+	}
+
 	public int getRowCount() {
 		return rowCount;
 	}
@@ -193,13 +206,13 @@ public class Field {
 	public Tile getTile(int row, int column) {
 		return tiles[row][column];
 	}
-	
+
 	@Override
-	//vypise znak na danu poziciu
+	// vypise znak na danu poziciu
 	public String toString() {
 		String str = "";
-		for (int row=0;row<rowCount;row++){
-			for (int col=0;col<columnCount;col++){
+		for (int row = 0; row < rowCount; row++) {
+			for (int col = 0; col < columnCount; col++) {
 				str += (tiles[row][col].toString());
 			}
 			str += "\n";
