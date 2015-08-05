@@ -45,6 +45,9 @@ public class ConsoleUI implements UserInterface {
 	@Override
 	public void newGameStarted(Field field) {
 		this.field = field;
+		System.out.println("Vitaj " + System.getProperty("user.name"));
+		System.out.println(
+				"X – ukoncenie hry,\nMA1 – oznacenie dlazdice v riadku A a stlpci 1,\nOB4 – odkrytie dlazdice v riadku B a stlpci 4\n");
 		do {
 			update();
 			processInput();
@@ -76,7 +79,7 @@ public class ConsoleUI implements UserInterface {
 		StringBuilder sb = new StringBuilder();
 		Formatter formatter = new Formatter(sb);
 		// System.out.print(" ");
-//		int x = field.getColumnCount();
+		// int x = field.getColumnCount();
 		System.out.printf("%2s", " ");
 		for (int i = 0; i < rowCount; i++) {
 			int a = i;
@@ -110,18 +113,25 @@ public class ConsoleUI implements UserInterface {
 			formatter.format("%n");
 		}
 		System.out.print(sb);
+		System.out.println("Pocet neoznacenych min je: "+field.getRemainingMineCount());
 		formatter.close();
-	} 
+	}
 
 	/**
 	 * Processes user input. Reads line from console and does the action on a
 	 * playing field according to input string.
 	 */
 	private void processInput() {
-		System.out.println("Vitaj " + System.getProperty("user.name"));
-		System.out.println(
-				"X – ukoncenie hry,\nMA1 – oznacenie dlazdice v riadku A a stlpci 1,\nOB4 – odkrytie dlazdice v riadku B a stlpci 4");
 		String input = readLine();
+		try {
+			handleInput(input);
+		} catch (WrongFormatException ex) {
+			ex.getMessage();
+			System.out.println(ex);
+		}
+	}
+
+	private void handleInput(String input) throws WrongFormatException {
 		input = input.toUpperCase();
 		Pattern p = Pattern.compile("X|((O|M)([A-Z])([0-9]))");
 		Matcher matcher = p.matcher(input);
@@ -132,20 +142,22 @@ public class ConsoleUI implements UserInterface {
 			} else {
 				int row = matcher.group(3).charAt(0) - 'A';
 				int column = Integer.parseInt(matcher.group(4));
-				if (row > field.getRowCount() || column > field.getColumnCount()) {
-					System.out.println("Zadal si prilis velke cislo stlpca alebo riadka!!!");
-				} else {
-					if ("O".equals(matcher.group(2))) {
-						field.openTile(row, column);
+				if (row >= field.getRowCount()) {
+					throw new WrongFormatException("Zadal si velke cislo riadka!!!");
+				}
+				if (column >= field.getColumnCount()) {
+					throw new WrongFormatException("Zadal si velke cislo stlpca!!!");
+				}
+				if ("O".equals(matcher.group(2))) {
+					field.openTile(row, column);
 
-					} else if ("M".equals(matcher.group(2))) {
-						field.markTile(row, column);
-					}
+				} else if ("M".equals(matcher.group(2))) {
+					field.markTile(row, column);
 				}
 			}
 		} else {
-			System.out.println("Zadal si zly parameter!!!");
+			throw new WrongFormatException("Zadal si zly parameter!!!");
 		}
-		
+
 	}
 }

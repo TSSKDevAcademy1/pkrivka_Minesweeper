@@ -187,6 +187,12 @@ public class Field {
 		}
 
 	}
+	
+	public int getRemainingMineCount(){
+		int number;
+		number=mineCount-getNumberOf(State.MARKED);
+		return number;
+	}
 
 	public int getRowCount() {
 		return rowCount;
