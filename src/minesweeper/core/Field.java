@@ -69,7 +69,9 @@ public class Field {
 			if (tile instanceof Mine) {
 				state = GameState.FAILED;
 				return;
-			} else if (((Clue) tile).getValue() == 0) {
+			}
+			
+			if (((Clue) tile).getValue() == 0) {
 				openAdjacentTiles(row, column);
 			}
 			if (isSolved()) {

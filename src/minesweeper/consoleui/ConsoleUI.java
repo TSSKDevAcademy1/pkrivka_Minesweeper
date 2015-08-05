@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Formatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,19 +73,21 @@ public class ConsoleUI implements UserInterface {
 		int c = 0;
 		int rowCount = field.getRowCount();
 		int colCount = field.getColumnCount();
+		StringBuilder sb = new StringBuilder();
+		Formatter formatter = new Formatter(sb);
 		// System.out.print(" ");
-		int x = field.getColumnCount();
+//		int x = field.getColumnCount();
 		System.out.printf("%2s", " ");
 		for (int i = 0; i < rowCount; i++) {
 			int a = i;
-			System.out.printf("%3s", a);
+			formatter.format("%3s", a);
 		}
-		System.out.print("\n");
+		formatter.format("%n");
 		for (int i = 0; i < rowCount; i++) {
 			int znak1 = 65 + b;
 			char myChar = (char) znak1;
 			if (i < 26) {
-				System.out.printf("%3s", myChar);
+				formatter.format("%3s", myChar);
 				b++;
 				if (b == 26) {
 					b = 0;
@@ -98,16 +101,17 @@ public class ConsoleUI implements UserInterface {
 				int znak2 = 65 + c;
 				char myChar1 = (char) znak1;
 				char myChar2 = (char) znak2;
-				System.out.printf("%3s", myChar1 + "" + myChar2);
+				formatter.format("%3s", myChar1 + "" + myChar2);
 				c++;
 			}
 			for (int j = 0; j < colCount; j++) {
-				System.out.printf("%3s", field.getTile(i, j));
+				formatter.format("%3s", field.getTile(i, j));
 			}
-			System.out.printf("%n");
+			formatter.format("%n");
 		}
-
-	}
+		System.out.print(sb);
+		formatter.close();
+	} 
 
 	/**
 	 * Processes user input. Reads line from console and does the action on a
@@ -142,5 +146,6 @@ public class ConsoleUI implements UserInterface {
 		} else {
 			System.out.println("Zadal si zly parameter!!!");
 		}
+		
 	}
 }
