@@ -8,6 +8,7 @@ import java.util.Formatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import minesweeper.Minesweeper;
 import minesweeper.UserInterface;
 import minesweeper.core.Field;
 import minesweeper.core.GameState;
@@ -51,10 +52,25 @@ public class ConsoleUI implements UserInterface {
 		do {
 			update();
 			processInput();
-			if (field.getState() == GameState.SOLVED) {
+			if (field.getState() == GameState.SOLVED) {				
+				for (int i = 0; i < field.getRowCount(); i++) {
+					for (int j = 0; j < field.getColumnCount(); j++) {
+						int row = i;
+						int column = j;
+						field.openTile(row, column);
+					}
+				}
+				update();
 				System.out.println("Si super, vyhral si!");
 				System.exit(0);
 			} else if (field.getState() == GameState.FAILED) {
+				for (int i = 0; i < field.getRowCount(); i++) {
+					for (int j = 0; j < field.getColumnCount(); j++) {
+						int row = i;
+						int column = j;
+						field.openTile(row, column);
+					}
+				}
 				update();
 				System.out.println("Prehral si!");
 				System.exit(0);
@@ -113,7 +129,14 @@ public class ConsoleUI implements UserInterface {
 			formatter.format("%n");
 		}
 		System.out.print(sb);
-		System.out.println("Pocet neoznacenych min je: "+field.getRemainingMineCount());
+		if (field.getState() == GameState.PLAYING) {
+			System.out.println("Pocet neoznacenych min je: "+field.getRemainingMineCount());
+			System.out.println("Tvoj hraci cas je zatial: "+Minesweeper.getInstance().getPlayingSeconds()+"s");
+		}
+		else {
+			System.out.println("Tvoj hraci cas bol: "+Minesweeper.getInstance().getPlayingSeconds()+"s");
+		}
+
 		formatter.close();
 	}
 

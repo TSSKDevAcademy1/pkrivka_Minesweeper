@@ -2,21 +2,27 @@ package minesweeper.tests;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import minesweeper.core.Clue;
 import minesweeper.core.Field;
 import minesweeper.core.GameState;
+import minesweeper.core.Tile;
 
 public class FieldTest {
 	static final int ROWS = 9;
 	static final int COLUMNS = 9;
 	static final int MINES = 10;
+	Field field;
+	
+	@Before
+	public void setUp(){
+		field = new Field(ROWS, COLUMNS, MINES);
+	}
 
 	@Test
 	public void isSolved() {
-		Field field = new Field(ROWS, COLUMNS, MINES);
-
 		assertEquals(GameState.PLAYING, field.getState());
 
 		int open = 0;
@@ -39,7 +45,6 @@ public class FieldTest {
 
 	@Test
 	public void generate() {
-		Field field = new Field(ROWS, COLUMNS, MINES);
 		// testovanie poctu riadkov pola
 		assertEquals(ROWS, field.getRowCount());
 		// testovanie poctu stlpcov pola
@@ -69,5 +74,40 @@ public class FieldTest {
 			}
 		}
 		assertEquals(ROWS * COLUMNS - MINES, clueCount);
+	}
+
+	@Test
+	public void oTile() {
+		// testovanie otvorenia dlazdice
+		for (int i = 0; i < field.getRowCount(); i++) {
+			for (int j = 0; j < field.getColumnCount(); j++) {
+				int row = i;
+				int column = j;
+				Tile tile = field.getTile(row, column);
+				field.openTile(row, column);
+				assertEquals(Tile.State.OPEN, tile.getState());
+				field.openTile(row, column);
+				assertEquals(Tile.State.OPEN, tile.getState());
+				field.markTile(row, column);
+				assertEquals(Tile.State.OPEN, tile.getState());
+			}
+		}
+	}
+	@Test
+	public void mTile() {
+		// testovanie oznacenia dlazdice
+		for (int i = 0; i < field.getRowCount(); i++) {
+			for (int j = 0; j < field.getColumnCount(); j++) {
+				int row = i;
+				int column = j;
+				Tile tile = field.getTile(row, column);
+				field.markTile(row, column);
+				assertEquals(Tile.State.MARKED, tile.getState());
+				field.openTile(row, column);
+				assertEquals(Tile.State.MARKED, tile.getState());
+				field.markTile(row, column);
+				assertEquals(Tile.State.CLOSED, tile.getState());
+			}
+		}
 	}
 }
