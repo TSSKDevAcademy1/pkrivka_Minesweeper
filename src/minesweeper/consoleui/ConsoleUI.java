@@ -8,6 +8,8 @@ import java.util.Formatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import minesweeper.BestTimes;
+import minesweeper.BestTimes.PlayerTime;
 import minesweeper.Minesweeper;
 import minesweeper.UserInterface;
 import minesweeper.core.Field;
@@ -49,6 +51,7 @@ public class ConsoleUI implements UserInterface {
 		System.out.println("Vitaj " + System.getProperty("user.name"));
 		System.out.println(
 				"X – ukoncenie hry,\nMA1 – oznacenie dlazdice v riadku A a stlpci 1,\nOB4 – odkrytie dlazdice v riadku B a stlpci 4\n");
+		
 		do {
 			update();
 			processInput();
