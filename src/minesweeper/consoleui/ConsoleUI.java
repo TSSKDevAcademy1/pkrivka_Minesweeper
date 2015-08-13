@@ -48,14 +48,15 @@ public class ConsoleUI implements UserInterface {
 	@Override
 	public void newGameStarted(Field field) {
 		this.field = field;
-		System.out.println("Vitaj " + System.getProperty("user.name"));
+		String name = System.getProperty("user.name");
+		System.out.println("Vitaj " + name);
 		System.out.println(
 				"X – ukoncenie hry,\nMA1 – oznacenie dlazdice v riadku A a stlpci 1,\nOB4 – odkrytie dlazdice v riadku B a stlpci 4\n");
-		
+
 		do {
 			update();
 			processInput();
-			if (field.getState() == GameState.SOLVED) {				
+			if (field.getState() == GameState.SOLVED) {
 				for (int i = 0; i < field.getRowCount(); i++) {
 					for (int j = 0; j < field.getColumnCount(); j++) {
 						int row = i;
@@ -64,7 +65,12 @@ public class ConsoleUI implements UserInterface {
 					}
 				}
 				update();
+				BestTimes bestTimes = new BestTimes();
+				int time = Minesweeper.getInstance().getPlayingSeconds();
+				bestTimes.addPlayerTime(name, time);
 				System.out.println("Si super, vyhral si!");
+				System.out.println(bestTimes.toString());
+
 				System.exit(0);
 			} else if (field.getState() == GameState.FAILED) {
 				for (int i = 0; i < field.getRowCount(); i++) {
@@ -133,11 +139,10 @@ public class ConsoleUI implements UserInterface {
 		}
 		System.out.print(sb);
 		if (field.getState() == GameState.PLAYING) {
-			System.out.println("Pocet neoznacenych min je: "+field.getRemainingMineCount());
-			System.out.println("Tvoj hraci cas je zatial: "+Minesweeper.getInstance().getPlayingSeconds()+"s");
-		}
-		else {
-			System.out.println("Tvoj hraci cas bol: "+Minesweeper.getInstance().getPlayingSeconds()+"s");
+			System.out.println("Pocet neoznacenych min je: " + field.getRemainingMineCount());
+			System.out.println("Tvoj hraci cas je zatial: " + Minesweeper.getInstance().getPlayingSeconds() + "s");
+		} else {
+			System.out.println("Tvoj hraci cas bol: " + Minesweeper.getInstance().getPlayingSeconds() + "s");
 		}
 
 		formatter.close();

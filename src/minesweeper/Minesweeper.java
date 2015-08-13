@@ -19,13 +19,13 @@ public class Minesweeper {
 	 */
 	private Minesweeper() {
 		instance = this;
-		bestTimes= new BestTimes();
-		bestTimes.addPlayerTime("Janko", 85);
-		bestTimes.addPlayerTime("Jozko", 100);
-		bestTimes.addPlayerTime("Lenka", 20);
-		System.out.println(bestTimes.toString());
+//		bestTimes= new BestTimes();
+//		bestTimes.addPlayerTime("Janko", 85);
+//		bestTimes.addPlayerTime("Jozko", 100);
+//		bestTimes.addPlayerTime("Lenka", 20);
+		
 		userInterface = new ConsoleUI();
-		Field field = new Field(8, 8, 10);
+		Field field = new Field(8, 8, 1);
 		// field.openTile(2, 3);
 		userInterface.newGameStarted(field);
 
